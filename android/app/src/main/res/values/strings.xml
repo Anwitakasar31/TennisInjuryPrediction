@@ -1,0 +1,30 @@
+<resources>
+    <string name="tfe_pe_app_name">TFL Pose Estimation</string>
+    <string name="tfe_pe_request_permission">This app needs camera permission.</string>
+    <string name="tfe_pe_tv_score">Score: %.2f</string>
+    <string name="tfe_pe_tv_model">Model: </string>
+    <string name="tfe_pe_tv_fps">Fps: %d</string>
+    <string name="tfe_pe_tv_device">Device: </string>
+    <string name="tfe_pe_tv_shoulderAngle">Shoulder Angle: %.2f</string>
+    <string name="tfe_pe_tv_classification_value">- %s</string>
+    <string-array name="tfe_pe_models_array">
+        <item>Movenet Lightning</item>
+        <item>Movenet Thunder</item>
+        <item>Posenet</item>
+    </string-array>
+
+    <string-array name="tfe_pe_device_name">
+        <item>CPU</item>
+        <item>GPU</item>
+        <item>NNAPI</item>
+    </string-array>
+    <string name="title_activity_player">PlayerActivity</string>
+    <string name="view_data">View Data</string>
+    <string name="delete">Delete</string>
+    <string name="title_activity_player_list">PlayerListActivity</string>
+    <string name="title_activity_player_dashboard">PlayerDashboardActivity</string>
+    <string name="capture">Capture</string>
+    <string name="result">View Results</string>
+    <string name="tracking">Tracking</string>
+    <string name="processdata">Process Data</string>
+</resources>
