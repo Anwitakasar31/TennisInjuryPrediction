@@ -1,32 +1,43 @@
 package org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class WeightedMovingAverage {
 
-    private final Queue<BigDecimal> window = new LinkedList<BigDecimal>();
-    private final int period;
-    private BigDecimal sum = BigDecimal.ZERO;
+    public static void main(String[] args) {
+        double[] array = {50, 45, 60};
 
-    public WeightedMovingAverage(int period) {
-        assert period > 0 : "Period must be a positive integer";
-        this.period = period;
+        double WMA = CalculateWeightedMovingAverage(array);
+        System.out.println("Final Weighted Moving Average - " + WMA);
+
     }
 
-    public void add(BigDecimal num) {
-        sum = sum.add(num);
-        window.add(num);
-        if (window.size() > period) {
-            sum = sum.subtract(window.remove());
+    public static double CalculateWeightedMovingAverage(double[] array)
+    {
+        int sumPeriod  = 0;
+        double movingSum = 0;
+        double WMA = 0.0;
+
+        for(int i=0; i<array.length; i++) {
+            sumPeriod = sumPeriod + (i+1);
         }
+        System.out.println("sumPeriod - " + sumPeriod);
+
+        for(int i=0; i<array.length; i++) {
+            double sum = movingAvarage(i+1, array[i]);
+            movingSum = movingSum + sum;
+            System.out.println("Total Moving Sum - " + movingSum);
+        }
+        WMA = movingSum / sumPeriod;
+        System.out.println("Final Weighted Moving Average - " + WMA);
+        return WMA;
     }
 
-    public BigDecimal getAverage() {
-        if (window.isEmpty()) return BigDecimal.ZERO; // technically the average is undefined
-        BigDecimal divisor = BigDecimal.valueOf(window.size());
-        return sum.divide(divisor, 2, RoundingMode.HALF_UP);
+    private static double movingAvarage(int period, double value) {
+        double sum = 0.0;
+        System.out.println("period - " + period);
+        System.out.println("Data value - " + value);
+
+        sum = period * value;
+        System.out.println("Moving Sum (Perriod * Value)- " + sum);
+        return sum;
     }
 }

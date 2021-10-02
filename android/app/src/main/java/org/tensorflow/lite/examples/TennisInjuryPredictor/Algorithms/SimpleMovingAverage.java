@@ -38,6 +38,18 @@ public class SimpleMovingAverage {
         return sum / period;
     }
 
+    public double CalculateSimpleMovingAverage(double[] input_data, int peroid)
+    {
+        double mean = 0.0;
+        SimpleMovingAverage obj = new SimpleMovingAverage(peroid);
+        for (double x : input_data) {
+            obj.addData(x);
+            mean = obj.getMean();
+            System.out.println("New number added is " +
+                    x + ", SMA = " + obj.getMean());
+        }
+        return mean;
+    }
     public static void main(String[] args)
     {
         double[] input_data = { 1, 3, 5, 6, 8,
