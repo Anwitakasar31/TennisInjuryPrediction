@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms.TennisInjuryPredictor;
+import org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms.WeightedMovingAverageCalculator;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Message;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Player;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.PlayerDBHelper;
@@ -33,6 +34,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
     TextView txtPlayerID, txtPlayerName;
     int playerID;
     String playerName;
+    int expectedRecordCount = 30;
     ArrayList<String> dataList;
     private static final String TAG = "TennisInjuryPredictor";
     @Override
@@ -65,7 +67,6 @@ public class PlayerDashboardActivity extends AppCompatActivity {
 
 
         //playerID = Integer.parseInt(txtPlayerID.getText().toString());
-
         tennisServeDetailDBHelper = new TennisServeDetailDBHelper(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -109,15 +110,25 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 startActivityForResult(myIntent, 0);
             }
         });
+        //Process record
         Button button4 = (Button) findViewById(R.id.button4);
         button4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent myIntent = new Intent( view.getContext(), PlayerTennisServeRecordActivity.class);
+                if(tennisServeDetailDBHelper == null)
+                {
+                   tennisServeDetailDBHelper = new TennisServeDetailDBHelper(PlayerDashboardActivity.this);
+                }
                 playerID = Integer.parseInt(txtPlayerID.getText().toString());
-                myIntent.putExtra("id", playerID);
-                myIntent.putExtra("name", playerName);
-                myIntent.putExtra("data", dataList);
-                startActivityForResult(myIntent, 0);
+                int recordCount = tennisServeDetailDBHelper.getTennisServeDetailsCount(playerID);
+                if(recordCount < expectedRecordCount)
+                {
+                    Message.message(getApplicationContext(),"Not enough data to process. Please collect 30 days data");
+                }
+                else
+                {
+                    TennisInjuryPredictor tennisInjuryPredictor = new TennisInjuryPredictor(PlayerDashboardActivity.this,playerID,expectedRecordCount);
+                }
+
             }
         });
     }

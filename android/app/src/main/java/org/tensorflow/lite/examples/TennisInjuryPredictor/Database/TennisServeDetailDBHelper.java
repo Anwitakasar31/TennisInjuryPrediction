@@ -114,14 +114,14 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
     }
 
     // Getting All tennisServeDetails
-    public List<TennisServeDetail> getAllTennisServeDetails(int playerId) {
+    public List<TennisServeDetail> getAllTennisServeDetails(int playerId, int expectedCount) {
 
 
         List<TennisServeDetail> tennisServeDetailList = new ArrayList<TennisServeDetail>();
 // Select All Query
         String selectQuery = "SELECT RecordID, PlayerID, RecordDate, ServeAngle FROM " + TABLE_TennisServeDetailS
                 //+ " Inner Join tennisServeDetail on TennisServeDetail.tennisServeDetailID = tennisServeDetail.tennisServeDetailID "
-                + " Where PlayerID = " + playerId + " ORDER BY RecordDate DESC";
+                + " Where PlayerID = " + playerId + " ORDER BY RecordDate DESC " + "LIMIT " + expectedCount;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 // looping through all rows and adding to list
@@ -145,7 +145,7 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
         List<String> tennisServeDetailList = new ArrayList<String>();
 // Select All Query
         String selectQuery = "SELECT RecordID, PlayerID, RecordDate, ServeAngle FROM " + TABLE_TennisServeDetailS
-                + " Where PlayerID = " + playerId ;
+                + " Where PlayerID = " + playerId  + " order by RecordDate DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 // looping through all rows and adding to list
