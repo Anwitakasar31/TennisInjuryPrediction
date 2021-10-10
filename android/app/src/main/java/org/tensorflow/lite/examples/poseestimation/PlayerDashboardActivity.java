@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms.TennisInjuryPredictor;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms.WeightedMovingAverageCalculator;
+import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResult;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Message;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Player;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.PlayerDBHelper;
@@ -128,6 +129,15 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 else
                 {
                     TennisInjuryPredictor tennisInjuryPredictor = new TennisInjuryPredictor(PlayerDashboardActivity.this,playerID,expectedRecordCount);
+                    InjuryPredictionResult injuryPredictionResult = tennisInjuryPredictor.ProcessData();
+                    if(injuryPredictionResult.GetErrorMessage() != null)
+                    {
+                        Message.message(getApplicationContext(),injuryPredictionResult.GetErrorMessage());
+                    }
+                    else
+                    {
+                        Message.message(getApplicationContext(),"Data processed successfully");
+                    }
                 }
 
             }

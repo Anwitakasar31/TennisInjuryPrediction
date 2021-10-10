@@ -39,7 +39,7 @@ public class InjuryPredictionResult {
     {
         this.predictionScore = score;
     }
-    public double SetPredictionScore()
+    public double GetPredictionScore()
     {
         return this.predictionScore;
     }
@@ -48,7 +48,7 @@ public class InjuryPredictionResult {
     {
         this.errorMessage = errorMessage;
     }
-    public String SetErrorMessage()
+    public String GetErrorMessage()
     {
         return this.errorMessage;
     }

@@ -36,8 +36,18 @@ public class TennisInjuryPredictor {
     }
     public InjuryPredictionResult ProcessData()
     {
-        InjuryPredictionResult injuryPredictionResult = new InjuryPredictionResult();
-        injuryPredictionResult.SetPlayerID(playerID);
+        boolean recordExists = false;
+        InjuryPredictionResult injuryPredictionResult;
+        injuryPredictionResult = injuryPredictionResultDBHelper.getInjuryPredictionResult(playerID);
+
+        if(injuryPredictionResult == null) {
+            injuryPredictionResult = new InjuryPredictionResult();
+            injuryPredictionResult.SetPlayerID(playerID);
+        }
+        else
+        {
+            recordExists = true;
+        }
         try{
             //Get All Tennis serve detail
             int recordCount = tennisServeDetailDBHelper.getTennisServeDetailsCount(playerID);
@@ -60,6 +70,9 @@ public class TennisInjuryPredictor {
                 {
 
                     weightedMovingAverage= WeightedMovingAverageCalculator.CalculateWeightedMovingAverage(tennisServeDetails,expectedRecordCount);
+                    injuryPredictionResult.SetWMA(weightedMovingAverage);
+
+                    //Calculate Prediction SCore
                     if (weightedMovingAverage > thresholdLevelServeAngle &&  weightedMovingAverage <=thresholdLeve2ServeAngle)
                     {
                         predictionScore = 1;
@@ -79,6 +92,16 @@ public class TennisInjuryPredictor {
                 }
                 injuryPredictionResult.SetPredictionScore(predictionScore);
                 //Anwita - Add or update record in database
+                if(recordExists)
+                {
+                    //Update record
+                    injuryPredictionResultDBHelper.updateInjuryPredictionResult(injuryPredictionResult);
+                }
+                else
+                {
+                    //Add new record
+                    injuryPredictionResultDBHelper.addInjuryPredictionResult(injuryPredictionResult);
+                }
                 return injuryPredictionResult;
             }
 

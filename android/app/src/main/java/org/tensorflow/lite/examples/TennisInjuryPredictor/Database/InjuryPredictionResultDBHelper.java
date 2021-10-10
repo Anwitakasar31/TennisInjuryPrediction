@@ -1,6 +1,8 @@
 package org.tensorflow.lite.examples.TennisInjuryPredictor.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -12,7 +14,7 @@ public class InjuryPredictionResultDBHelper extends SQLiteOpenHelper {
     // Database Name
     public static final String DATABASE_NAME = "TennisInjuryPredictor.db";
     // Contacts table name
-    public static final String TABLE_TennisServeDetailS = "InjuryPredictionResult";
+    public static final String TABLE_InjuryPrediction_DetailS = "InjuryPredictionResult";
     // Musics Table Columns names
     public static final String RECORD_ID = "RecordID";
     public static final String PLAYER_ID = "PlayerID";
@@ -29,10 +31,10 @@ public class InjuryPredictionResultDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_TennisServeDetailS + "("
-                + RECORD_ID + " INTEGER PRIMARY KEY," + PLAYER_ID + " TEXT,"
-                + WEIGHTED_MOVING_AVERAGE + " DOUBLE," +  SCORE + " DOUBLE" + ")";
-        db.execSQL(CREATE_PLAYER_TABLE);
+        String CREATE_PREDICTION_TABLE = "CREATE TABLE " + TABLE_InjuryPrediction_DetailS + "("
+                + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLAYER_ID + " INTEGER,"
+                + WEIGHTED_MOVING_AVERAGE + " REAL," +  SCORE + " REAL" + ")";
+        db.execSQL(CREATE_PREDICTION_TABLE);
     }
 
     @Override
@@ -45,15 +47,65 @@ public class InjuryPredictionResultDBHelper extends SQLiteOpenHelper {
 
     public void DropTable() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TennisServeDetailS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_InjuryPrediction_DetailS);
 
     }
     public void CreateTable() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String CREATE_PLAYER_TABLE =  "CREATE TABLE " + TABLE_TennisServeDetailS + "("
-                + RECORD_ID + " INTEGER PRIMARY KEY," + PLAYER_ID + " TEXT,"
-                + WEIGHTED_MOVING_AVERAGE + " DOUBLE," +  SCORE + " DOUBLE" + ")";
-        db.execSQL(CREATE_PLAYER_TABLE);
+        String CREATE_PREDICTION_TABLE = "CREATE TABLE " + TABLE_InjuryPrediction_DetailS + "("
+                + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLAYER_ID + " INTEGER,"
+                + WEIGHTED_MOVING_AVERAGE + " REAL," +  SCORE + " REAL" + ")";
+        db.execSQL(CREATE_PREDICTION_TABLE);
+    }
+
+    public void addInjuryPredictionResult(InjuryPredictionResult injuryPredictionResult) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+
+
+            ContentValues values = new ContentValues();
+            values.put(PLAYER_ID, injuryPredictionResult.GetPlayerID()); // InjuryPredictionResult code
+            values.put(WEIGHTED_MOVING_AVERAGE, injuryPredictionResult.GetWMA());
+            values.put(SCORE, injuryPredictionResult.GetPredictionScore());
+
+            db.insert(TABLE_InjuryPrediction_DetailS, null, values);
+            db.close(); // Closing database connection
+        }
+        catch(Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+
+    public InjuryPredictionResult getInjuryPredictionResult(int playerId) {
+
+        String selectQuery = "SELECT RecordID, PlayerID, WeightedMovingAverage, Score FROM " + TABLE_InjuryPrediction_DetailS
+                + " Where PlayerID = " + playerId ;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        InjuryPredictionResult InjuryPredictionResult = new InjuryPredictionResult();
+        InjuryPredictionResult.SetRecordID(cursor.getInt(0));
+        InjuryPredictionResult.SetPlayerID(cursor.getInt(1));
+        InjuryPredictionResult.SetWMA(cursor.getDouble(2));
+        InjuryPredictionResult.SetPredictionScore(cursor.getDouble(3));
+
+        return InjuryPredictionResult;
+    }
+
+    // Updating a InjuryPredictionResult
+    public int updateInjuryPredictionResult(InjuryPredictionResult injuryPredictionResult) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(WEIGHTED_MOVING_AVERAGE, injuryPredictionResult.GetWMA());
+        values.put(SCORE, injuryPredictionResult.GetPredictionScore());
+
+// updating row
+        return db.update(TABLE_InjuryPrediction_DetailS, values, RECORD_ID + " = ?",
+                new String[]{String.valueOf(injuryPredictionResult.GetRecordID())});
     }
 }
 
