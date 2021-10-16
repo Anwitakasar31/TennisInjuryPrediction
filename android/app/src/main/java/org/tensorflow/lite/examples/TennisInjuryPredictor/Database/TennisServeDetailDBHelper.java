@@ -165,8 +165,8 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
     }
 
     // Getting tennisServeDetails Count
-    public int getTennisServeDetailsCount(int personID) {
-        String countQuery = "SELECT * FROM " + TABLE_TennisServeDetailS + " Where PersonID=" + personID;
+    public int getTennisServeDetailsCount(int playerID) {
+        String countQuery = "SELECT * FROM " + TABLE_TennisServeDetailS + " Where PlayerID=" + playerID;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         //cursor.close();

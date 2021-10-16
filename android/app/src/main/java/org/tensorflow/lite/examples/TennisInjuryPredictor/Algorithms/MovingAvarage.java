@@ -3,7 +3,7 @@ package org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms;
 //Anwita - This is simple and better
 public class MovingAvarage {
 
-    public static void main(String[] args) {
+    /*public static void Main(String[] args) {
         double[] array = {1.2, 3.4, 4.5, 4.5, 4.5};
 
         double St = 0D;
@@ -12,7 +12,7 @@ public class MovingAvarage {
         }
         System.out.println(St);
 
-    }
+    }*/
 
     public static double CalculateMovingAverage(double[] array)
     {

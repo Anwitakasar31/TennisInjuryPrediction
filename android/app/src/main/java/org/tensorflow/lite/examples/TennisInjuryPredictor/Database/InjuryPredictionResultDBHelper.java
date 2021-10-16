@@ -77,22 +77,31 @@ public class InjuryPredictionResultDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int getInjuryPredictionResultCount(int playerID) {
+        String countQuery = "SELECT RecordID, PlayerID, WeightedMovingAverage, Score FROM " + TABLE_InjuryPrediction_DetailS + " Where PlayerID=" + playerID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        //cursor.close();
+// return count
+        return cursor.getCount();
+    }
 
     public InjuryPredictionResult getInjuryPredictionResult(int playerId) {
-
+        InjuryPredictionResult injuryPredictionResult = null;
         String selectQuery = "SELECT RecordID, PlayerID, WeightedMovingAverage, Score FROM " + TABLE_InjuryPrediction_DetailS
                 + " Where PlayerID = " + playerId ;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor != null)
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-        InjuryPredictionResult InjuryPredictionResult = new InjuryPredictionResult();
-        InjuryPredictionResult.SetRecordID(cursor.getInt(0));
-        InjuryPredictionResult.SetPlayerID(cursor.getInt(1));
-        InjuryPredictionResult.SetWMA(cursor.getDouble(2));
-        InjuryPredictionResult.SetPredictionScore(cursor.getDouble(3));
+            injuryPredictionResult = new InjuryPredictionResult();
+            injuryPredictionResult.SetRecordID(cursor.getInt(0));
+            injuryPredictionResult.SetPlayerID(cursor.getInt(1));
+            injuryPredictionResult.SetWMA(cursor.getDouble(2));
+            injuryPredictionResult.SetPredictionScore(cursor.getDouble(3));
+        }
 
-        return InjuryPredictionResult;
+        return injuryPredictionResult;
     }
 
     // Updating a InjuryPredictionResult

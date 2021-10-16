@@ -1,13 +1,16 @@
 package org.tensorflow.lite.examples.TennisInjuryPredictor.Algorithms;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResult;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResultDBHelper;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.PlayerDBHelper;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.TennisServeDetail;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.TennisServeDetailDBHelper;
+import org.tensorflow.lite.examples.poseestimation.ProjectConstants;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class TennisInjuryPredictor {
@@ -27,6 +30,7 @@ public class TennisInjuryPredictor {
     }
     public TennisInjuryPredictor(Context context, int playerID, int expectedRecordCount)
     {
+        Log.i(ProjectConstants.TAG, "Coming in TennisInjuryPredictor constructor");
         this.context = context;
         this.playerID = playerID;
         this.expectedRecordCount = expectedRecordCount;
@@ -38,9 +42,13 @@ public class TennisInjuryPredictor {
     {
         boolean recordExists = false;
         InjuryPredictionResult injuryPredictionResult;
+        int predictionResultRecordCount = injuryPredictionResultDBHelper.getInjuryPredictionResultCount(playerID);
         injuryPredictionResult = injuryPredictionResultDBHelper.getInjuryPredictionResult(playerID);
+        Log.i(ProjectConstants.TAG, "InjuryPredictionResult Record Count = " + predictionResultRecordCount);
 
-        if(injuryPredictionResult == null) {
+        if(predictionResultRecordCount == 0) {
+            recordExists = false;
+            Log.i(ProjectConstants.TAG, "InjuryPredictionResult does not exists in database");
             injuryPredictionResult = new InjuryPredictionResult();
             injuryPredictionResult.SetPlayerID(playerID);
         }
@@ -64,12 +72,16 @@ public class TennisInjuryPredictor {
                 //Save in Tennis prediction
                 double predictionScore = 0;
                 double weightedMovingAverage = 0.0;
-                double[] playerServerAngles = new double[expectedRecordCount];
+                double[] playerServerAngles;
                 List<TennisServeDetail> tennisServeDetails =   tennisServeDetailDBHelper.getAllTennisServeDetails(playerID, expectedRecordCount);
-                if (tennisServeDetails !=null && tennisServeDetails.size() == expectedRecordCount)
+                Log.i(ProjectConstants.TAG, "tennisServeDetail list size - " + tennisServeDetails.size());
+                if (tennisServeDetails !=null && tennisServeDetails.size() >= expectedRecordCount)
                 {
+                    //Anwita - Arrange these from old to latest
+                    playerServerAngles = getArray (tennisServeDetails);
+                    weightedMovingAverage= WeightedMovingAverage.CalculateWeightedMovingAverage(playerServerAngles);
 
-                    weightedMovingAverage= WeightedMovingAverageCalculator.CalculateWeightedMovingAverage(tennisServeDetails,expectedRecordCount);
+                    Log.i(ProjectConstants.TAG, "Weighted Moving Average - " + weightedMovingAverage);
                     injuryPredictionResult.SetWMA(weightedMovingAverage);
 
                     //Calculate Prediction SCore
@@ -91,14 +103,17 @@ public class TennisInjuryPredictor {
                     }
                 }
                 injuryPredictionResult.SetPredictionScore(predictionScore);
+                Log.i(ProjectConstants.TAG, "Prediction Score - " + predictionScore);
                 //Anwita - Add or update record in database
                 if(recordExists)
                 {
+                    Log.i(ProjectConstants.TAG, "Record exists - Updating");
                     //Update record
                     injuryPredictionResultDBHelper.updateInjuryPredictionResult(injuryPredictionResult);
                 }
                 else
                 {
+                    Log.i(ProjectConstants.TAG, "Record does not exists - inserting");
                     //Add new record
                     injuryPredictionResultDBHelper.addInjuryPredictionResult(injuryPredictionResult);
                 }
@@ -112,5 +127,29 @@ public class TennisInjuryPredictor {
             return injuryPredictionResult;
         }
 
+    }
+
+    private double[] getArray(List<TennisServeDetail> tennisServeDetails)
+    {
+        Log.i(ProjectConstants.TAG, "tennisServeDetail list size - " + tennisServeDetails.size());
+        double[] playerServerAngles = new double[tennisServeDetails.size()];
+        int i = 0;
+        int totalCount = tennisServeDetails.size();
+        for (int x = totalCount -1; x >=0; x--)
+        {
+            TennisServeDetail tennisServeDetail = tennisServeDetails.get(x);
+            if(tennisServeDetail == null)
+            {
+                Log.i(ProjectConstants.TAG, "tennisServeDetail record not found");
+            }
+            else {
+                Log.i(ProjectConstants.TAG, "Adding value -" + tennisServeDetail.GetServeAngle() + " in the array");
+                playerServerAngles[i] = tennisServeDetail.GetServeAngle();
+                i++;
+            }
+        }
+        Log.i(ProjectConstants.TAG, "playerServerAngles array size - " + playerServerAngles.length);
+        Log.i(ProjectConstants.TAG, "Array values - " + Arrays.toString(playerServerAngles) );
+        return playerServerAngles;
     }
 }

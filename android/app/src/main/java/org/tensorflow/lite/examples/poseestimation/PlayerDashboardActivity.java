@@ -35,7 +35,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
     TextView txtPlayerID, txtPlayerName;
     int playerID;
     String playerName;
-    int expectedRecordCount = 30;
+    int expectedRecordCount = 10;
     ArrayList<String> dataList;
     private static final String TAG = "TennisInjuryPredictor";
     @Override
@@ -128,6 +128,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    Log.i(ProjectConstants.TAG, "Processing Data.");
                     TennisInjuryPredictor tennisInjuryPredictor = new TennisInjuryPredictor(PlayerDashboardActivity.this,playerID,expectedRecordCount);
                     InjuryPredictionResult injuryPredictionResult = tennisInjuryPredictor.ProcessData();
                     if(injuryPredictionResult.GetErrorMessage() != null)
@@ -191,7 +192,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
             TennisServeDetail tennisServeDetail = new TennisServeDetail();
             tennisServeDetail.SetPlayerID(playerID);
             tennisServeDetail.SetRecordDate(dateNow);
-            tennisServeDetail.SetServeAngle(35.6);
+            tennisServeDetail.SetServeAngle(261.4);
             tennisServeDetailDBHelper.addTennisServeDetail(tennisServeDetail);
             Message.message(getApplicationContext(),"Insertion Unsuccessful");
         }
