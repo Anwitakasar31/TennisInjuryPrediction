@@ -54,7 +54,7 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
 
         String CREATE_TENNISSERVEDETAIL_TABLE = "CREATE TABLE " + TABLE_TennisServeDetailS + "("
                 + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLAYER_ID + " INTEGER,"
-                + RECORD_DATE + " NUMERIC," +  SERVE_ANGLE + " REAL" + ")";
+                + RECORD_DATE + " TEXT," +  SERVE_ANGLE + " REAL" + ")";
         db.execSQL(CREATE_TENNISSERVEDETAIL_TABLE);
 
         String CREATE_PREDICTION_TABLE = "CREATE TABLE " + TABLE_InjuryPrediction_DetailS + "("

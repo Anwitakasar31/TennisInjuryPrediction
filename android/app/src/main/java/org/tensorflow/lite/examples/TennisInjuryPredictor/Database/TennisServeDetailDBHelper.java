@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.*;
+import org.tensorflow.lite.examples.poseestimation.ProjectConstants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +41,7 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TENNISSERVEDETAIL_TABLE = "CREATE TABLE " + TABLE_TennisServeDetailS + "("
                 + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLAYER_ID + " INTEGER,"
-                + RECORD_DATE + " NUMERIC," +  SERVE_ANGLE + " REAL" + ")";
+                + RECORD_DATE + " TEXT," +  SERVE_ANGLE + " REAL" + ")";
         db.execSQL(CREATE_TENNISSERVEDETAIL_TABLE);
     }
 
@@ -59,7 +62,7 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String CREATE_TENNISSERVEDETAIL_TABLE = "CREATE TABLE " + TABLE_TennisServeDetailS + "("
                 + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLAYER_ID + " INTEGER,"
-                + RECORD_DATE + " NUMERIC," +  SERVE_ANGLE + " REAL" + ")";
+                + RECORD_DATE + " TEXT," +  SERVE_ANGLE + " REAL" + ")";
         db.execSQL(CREATE_TENNISSERVEDETAIL_TABLE);
     }
 
@@ -121,7 +124,7 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
 // Select All Query
         String selectQuery = "SELECT RecordID, PlayerID, RecordDate, ServeAngle FROM " + TABLE_TennisServeDetailS
                 //+ " Inner Join tennisServeDetail on TennisServeDetail.tennisServeDetailID = tennisServeDetail.tennisServeDetailID "
-                + " Where PlayerID = " + playerId + " ORDER BY RecordDate DESC " + "LIMIT " + expectedCount;
+                + " Where PlayerID = " + playerId + " ORDER BY datetime(RecordDate) DESC " + "LIMIT  " + expectedCount;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 // looping through all rows and adding to list
@@ -139,13 +142,36 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
         return tennisServeDetailList;
     }
 
+    // Getting All tennisServeDetails
+    public List<Double> getRecentTennisServeAnglesDetails(int playerId, int expectedCount) {
+
+
+        List<Double> tennisServeDetailList = new ArrayList<Double>();
+// Select All Query
+        String selectQuery = "SELECT RecordDate, ServeAngle FROM " + TABLE_TennisServeDetailS
+                //+ " Inner Join tennisServeDetail on TennisServeDetail.tennisServeDetailID = tennisServeDetail.tennisServeDetailID "
+                + " Where PlayerID = " + playerId + " ORDER BY datetime(RecordDate) DESC ";
+                //+ "LIMIT " + expectedCount;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+// looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                double serverAngle = cursor.getDouble(1);
+                tennisServeDetailList.add(serverAngle);
+            } while (cursor.moveToNext());
+        }
+        Log.i(ProjectConstants.TAG, "Array values in TennisServeDetailDBHelper - " + Arrays.toString(tennisServeDetailList.toArray()) );
+        return tennisServeDetailList;
+    }
+
     public List<String> getAllTennisServeDetails1(int playerId) {
 
 
         List<String> tennisServeDetailList = new ArrayList<String>();
 // Select All Query
         String selectQuery = "SELECT RecordID, PlayerID, RecordDate, ServeAngle FROM " + TABLE_TennisServeDetailS
-                + " Where PlayerID = " + playerId  + " order by RecordDate DESC";
+                + " Where PlayerID = " + playerId  + " order by datetime(RecordDate) DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 // looping through all rows and adding to list

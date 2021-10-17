@@ -73,12 +73,13 @@ public class TennisInjuryPredictor {
                 double predictionScore = 0;
                 double weightedMovingAverage = 0.0;
                 double[] playerServerAngles;
-                List<TennisServeDetail> tennisServeDetails =   tennisServeDetailDBHelper.getAllTennisServeDetails(playerID, expectedRecordCount);
+                List<Double> tennisServeDetails =   tennisServeDetailDBHelper.getRecentTennisServeAnglesDetails(playerID, expectedRecordCount);
                 Log.i(ProjectConstants.TAG, "tennisServeDetail list size - " + tennisServeDetails.size());
+
                 if (tennisServeDetails !=null && tennisServeDetails.size() >= expectedRecordCount)
                 {
                     //Anwita - Arrange these from old to latest
-                    playerServerAngles = getArray (tennisServeDetails);
+                    playerServerAngles = getArray (tennisServeDetails, expectedRecordCount);
                     weightedMovingAverage= WeightedMovingAverage.CalculateWeightedMovingAverage(playerServerAngles);
 
                     Log.i(ProjectConstants.TAG, "Weighted Moving Average - " + weightedMovingAverage);
@@ -129,27 +130,38 @@ public class TennisInjuryPredictor {
 
     }
 
-    private double[] getArray(List<TennisServeDetail> tennisServeDetails)
+    private double[] getArray(List<Double> tennisServeDetails, int expectedCount)
     {
-        Log.i(ProjectConstants.TAG, "tennisServeDetail list size - " + tennisServeDetails.size());
-        double[] playerServerAngles = new double[tennisServeDetails.size()];
-        int i = 0;
-        int totalCount = tennisServeDetails.size();
-        for (int x = totalCount -1; x >=0; x--)
-        {
-            TennisServeDetail tennisServeDetail = tennisServeDetails.get(x);
-            if(tennisServeDetail == null)
-            {
-                Log.i(ProjectConstants.TAG, "tennisServeDetail record not found");
+        try {
+            Log.i(ProjectConstants.TAG, "inside getArray - " + tennisServeDetails.size());
+            int indexToStart = 0;
+            int recordCount = tennisServeDetails.size();
+            Log.i(ProjectConstants.TAG, "tennisServeDetail list size in getArray - " + tennisServeDetails.size());
+            if (recordCount >= expectedCount) {
+                indexToStart = recordCount - expectedCount;
+                Log.i(ProjectConstants.TAG, "Index to Start - " + indexToStart);
             }
-            else {
-                Log.i(ProjectConstants.TAG, "Adding value -" + tennisServeDetail.GetServeAngle() + " in the array");
-                playerServerAngles[i] = tennisServeDetail.GetServeAngle();
-                i++;
+            double[] playerServerAngles = new double[expectedCount];
+            int i = 0;
+            int totalCount = tennisServeDetails.size();
+            for (int x = indexToStart - 1; x < recordCount -1; x++) {
+                Double tennisServeDetail = tennisServeDetails.get(x);
+                if (tennisServeDetail == null) {
+                    Log.i(ProjectConstants.TAG, "tennisServeDetail record not found");
+                } else {
+                    Log.i(ProjectConstants.TAG, "Adding value -" + tennisServeDetail + " in the array");
+                    playerServerAngles[i] = tennisServeDetail;
+                    i++;
+                }
             }
+            Log.i(ProjectConstants.TAG, "playerServerAngles array size - " + playerServerAngles.length);
+            Log.i(ProjectConstants.TAG, "Array values - " + Arrays.toString(playerServerAngles));
+            return playerServerAngles;
         }
-        Log.i(ProjectConstants.TAG, "playerServerAngles array size - " + playerServerAngles.length);
-        Log.i(ProjectConstants.TAG, "Array values - " + Arrays.toString(playerServerAngles) );
-        return playerServerAngles;
+        catch(Exception ex)
+        {
+            Log.e(ProjectConstants.TAG, "Error when creating array - " + ex.getMessage());
+            return null;
+        }
     }
 }
