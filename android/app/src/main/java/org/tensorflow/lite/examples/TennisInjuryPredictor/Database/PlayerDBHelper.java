@@ -194,7 +194,6 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
 
     public List<String> getAllPlayerNames() {
 
-
         List<String> PlayerList = new ArrayList<String>();
 // Select All Query
         String selectQuery = "SELECT  PlayerID, PlayerName, PlayerAge, TennisLevel FROM " + TABLE_PlayerS;
@@ -206,7 +205,8 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
             do {
                 Integer id = cursor.getInt(0);
                 String name = cursor.getString(1);
-                String val =id + "-" + name;
+                Integer age = cursor.getInt(2);
+                String val =id + "-" + name + "-" +  age;
 
                 PlayerList.add(val);
             } while (cursor.moveToNext());

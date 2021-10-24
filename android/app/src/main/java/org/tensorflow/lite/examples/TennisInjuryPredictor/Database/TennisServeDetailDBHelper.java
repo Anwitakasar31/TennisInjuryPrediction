@@ -182,7 +182,7 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
                 tennisServeDetail.SetPlayerID(cursor.getInt(1));
                 tennisServeDetail.SetRecordDate(new Date(cursor.getString(2)));
                 tennisServeDetail.SetServeAngle(cursor.getDouble(3));
-                String val =tennisServeDetail.GetRecordID() + " - " + tennisServeDetail.GetRecordDate() + " - " + tennisServeDetail.GetServeAngle();
+                String val =tennisServeDetail.GetRecordID() + " - " + tennisServeDetail.GetRecordDate() + " - " + String.format("%.2f",tennisServeDetail.GetServeAngle());
                 tennisServeDetailList.add(val);
             } while (cursor.moveToNext());
         }

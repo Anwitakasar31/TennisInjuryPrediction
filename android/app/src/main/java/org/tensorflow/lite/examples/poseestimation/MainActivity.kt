@@ -35,6 +35,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Message
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.TennisServeDetail
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.TennisServeDetailDBHelper
 import org.tensorflow.lite.examples.poseestimation.ProjectConstants.TAG
@@ -366,10 +367,11 @@ class MainActivity : AppCompatActivity() {
             tennisServeDetail.SetServeAngle(playerShoulderAngle.toDouble())
             tennisServeDetailDBHelper?.addTennisServeDetail(tennisServeDetail)
             Log.d(TAG, "Saved TennisServeDetail")
+            Message.message(applicationContext, "Tennis Serve record saved successfully")
         }
         else
         {
-            Log.d(TAG, "Could not serve TennisServeDetail")
+            Log.d(TAG, "Could not save TennisServeDetail")
         }
     }
 

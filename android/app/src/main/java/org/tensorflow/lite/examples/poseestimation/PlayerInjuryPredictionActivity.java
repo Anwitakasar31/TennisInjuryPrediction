@@ -54,9 +54,9 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
         }
         else
         {
-            txtWMA.setText(String.valueOf(injuryPredictionResult.GetWMA()));
+            txtWMA.setText(String.valueOf(String.format("%.2f",injuryPredictionResult.GetWMA())));
             double predictionScore = injuryPredictionResult.GetPredictionScore();
-            txtPredictionScore.setText(String.valueOf(injuryPredictionResult.GetPredictionScore()));
+            txtPredictionScore.setText(String.valueOf(String.format("%.1f",injuryPredictionResult.GetPredictionScore())));
 
             if(predictionScore == 1)
             {

@@ -60,12 +60,13 @@ public class PlayerDashboardActivity extends AppCompatActivity {
             playerName = dataList.get(1);
             Log.i(ProjectConstants.TAG, "PlayerID in Dashboard from Array Value - " + playerID1);
             Log.i(ProjectConstants.TAG, "PlayerName in Dashboard from Array Value - " + playerName);
+            playerID =Integer.parseInt(playerID1);
         }
         txtPlayerID= (TextView) findViewById(R.id.textPlayerID);
         txtPlayerName= (TextView) findViewById(R.id.textPlayerName);
         txtPlayerID.setText(playerID1);
+        txtPlayerName= (TextView) findViewById(R.id.textPlayerName);
         txtPlayerName.setText(playerName);
-
 
         //playerID = Integer.parseInt(txtPlayerID.getText().toString());
         tennisServeDetailDBHelper = new TennisServeDetailDBHelper(this);
@@ -93,7 +94,9 @@ public class PlayerDashboardActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent myIntent = new Intent( view.getContext(), PlayerInjuryPredictionActivity.class);
-                playerID = Integer.parseInt(txtPlayerID.getText().toString());
+                if(txtPlayerID.getText() !=null) {
+                    playerID = Integer.parseInt(txtPlayerID.getText().toString());
+                }
                 myIntent.putExtra("id", playerID);
                 myIntent.putExtra("name", playerName);
                 myIntent.putExtra("data", dataList);
@@ -104,7 +107,9 @@ public class PlayerDashboardActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent myIntent = new Intent( view.getContext(), PlayerTennisServeRecordActivity.class);
-                playerID = Integer.parseInt(txtPlayerID.getText().toString());
+                if(txtPlayerID.getText() !=null) {
+                    playerID = Integer.parseInt(txtPlayerID.getText().toString());
+                }
                 myIntent.putExtra("id", playerID);
                 myIntent.putExtra("name", playerName);
                 myIntent.putExtra("data", dataList);
@@ -122,6 +127,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 }
                 playerID = Integer.parseInt(txtPlayerID.getText().toString());
                 int recordCount = tennisServeDetailDBHelper.getTennisServeDetailsCount(playerID);
+                Log.i(ProjectConstants.TAG, "Tennis Serve record count- " + recordCount);
                 if(recordCount < expectedRecordCount)
                 {
                     Message.message(getApplicationContext(),"Not enough data to process. Please collect 30 days data");
@@ -192,7 +198,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
             TennisServeDetail tennisServeDetail = new TennisServeDetail();
             tennisServeDetail.SetPlayerID(playerID);
             tennisServeDetail.SetRecordDate(dateNow);
-            tennisServeDetail.SetServeAngle(261.4);
+            tennisServeDetail.SetServeAngle(124.9);
             tennisServeDetailDBHelper.addTennisServeDetail(tennisServeDetail);
             Message.message(getApplicationContext(),"Insertion Unsuccessful");
         }

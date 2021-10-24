@@ -22,7 +22,7 @@
         android:layout_marginBottom="64dp"
         android:onClick="addPlayer"
         android:text="Add Player"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.128"

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResult;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResultDBHelper;
+import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Player;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.PlayerDBHelper;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.TennisServeDetail;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.TennisServeDetailDBHelper;
@@ -20,9 +21,24 @@ public class TennisInjuryPredictor {
     PlayerDBHelper playerDBHelper;
     TennisServeDetailDBHelper tennisServeDetailDBHelper;
     InjuryPredictionResultDBHelper injuryPredictionResultDBHelper;
-    double thresholdLevelServeAngle = 230;
-    double thresholdLeve2ServeAngle = 250;
-    double thresholdLeve3ServeAngle = 270;
+    Player player;
+    int playerAge;
+    //Player age range
+    // range 1- 15 -25
+    //range 2 = 25 - 35
+    //range 3 - 35 +
+    double range1thresholdLevel1ServeAngle = 130;
+    double range1thresholdLeve2ServeAngle = 140;
+    double range1thresholdLeve3ServeAngle = 160;
+
+    double range2thresholdLevel1ServeAngle = 130;
+    double range2thresholdLeve2ServeAngle = 140;
+    double range2thresholdLeve3ServeAngle = 160;
+
+    double range3thresholdLevel1ServeAngle = 120;
+    double range3thresholdLeve2ServeAngle = 130;
+    double range3thresholdLeve3ServeAngle = 140;
+
     public TennisInjuryPredictor()
     {
         playerDBHelper = new PlayerDBHelper(context);
@@ -37,6 +53,13 @@ public class TennisInjuryPredictor {
         playerDBHelper = new PlayerDBHelper(context);
         tennisServeDetailDBHelper = new TennisServeDetailDBHelper(context);
         injuryPredictionResultDBHelper = new InjuryPredictionResultDBHelper(context);
+
+        player = playerDBHelper.getPlayer(playerID);
+        if(player != null)
+        {
+            playerAge =  player.GetPlayerAge();
+            Log.i(ProjectConstants.TAG, "Player age is " + playerAge);
+        }
     }
     public InjuryPredictionResult ProcessData()
     {
@@ -70,7 +93,7 @@ public class TennisInjuryPredictor {
                 // process
                 //Calculate WEighted moving average
                 //Save in Tennis prediction
-                double predictionScore = 0;
+                double predictionScore = 0.0;
                 double weightedMovingAverage = 0.0;
                 double[] playerServerAngles;
                 List<Double> tennisServeDetails =   tennisServeDetailDBHelper.getRecentTennisServeAnglesDetails(playerID, expectedRecordCount);
@@ -86,25 +109,13 @@ public class TennisInjuryPredictor {
                     injuryPredictionResult.SetWMA(weightedMovingAverage);
 
                     //Calculate Prediction SCore
-                    if (weightedMovingAverage > thresholdLevelServeAngle &&  weightedMovingAverage <=thresholdLeve2ServeAngle)
-                    {
-                        predictionScore = 1;
-                    }
-                    else if (weightedMovingAverage > thresholdLeve2ServeAngle &&  weightedMovingAverage <=thresholdLeve3ServeAngle)
-                    {
-                        predictionScore = 2;
-                    }
-                    if (weightedMovingAverage > thresholdLeve3ServeAngle)
-                    {
-                        predictionScore = 3;
-                    }
-                    else
-                    {
-                        predictionScore = 0;
-                    }
+                    double predScoreReturned = calculatePredictionScore(playerAge, weightedMovingAverage);
+                    Log.i(ProjectConstants.TAG, "Prediction score returned from function- " + predScoreReturned);
+                    predictionScore = predScoreReturned;
+                    Log.i(ProjectConstants.TAG, "Prediction score calculated- " + predictionScore);
                 }
                 injuryPredictionResult.SetPredictionScore(predictionScore);
-                Log.i(ProjectConstants.TAG, "Prediction Score - " + predictionScore);
+                Log.i(ProjectConstants.TAG, "Prediction score calculated- " + predictionScore);
                 //Anwita - Add or update record in database
                 if(recordExists)
                 {
@@ -129,6 +140,7 @@ public class TennisInjuryPredictor {
         }
 
     }
+
 
     private double[] getArray(List<Double> tennisServeDetails, int expectedCount)
     {
@@ -163,5 +175,64 @@ public class TennisInjuryPredictor {
             Log.e(ProjectConstants.TAG, "Error when creating array - " + ex.getMessage());
             return null;
         }
+    }
+
+    private double calculatePredictionScore(int playerAge, double weightedMovingAverage)
+    {
+        //Player age range
+        // range 1- 15 -25
+        //range 2 = 25 - 35
+        //range 3 - 35 +
+        double predScore = 0;
+        if(playerAge >= 15 && playerAge <= 25) {
+            if (weightedMovingAverage > range1thresholdLevel1ServeAngle && weightedMovingAverage <= range1thresholdLeve2ServeAngle) {
+                predScore = 1;
+            }
+            else if (weightedMovingAverage > range1thresholdLeve2ServeAngle && weightedMovingAverage <= range1thresholdLeve3ServeAngle) {
+                predScore = 2;
+            }
+            else if (weightedMovingAverage > range1thresholdLeve3ServeAngle) {
+                predScore = 3;
+            }
+            else {
+                predScore = 0;
+            }
+        }
+        else if(playerAge > 25 && playerAge <= 35) {
+            if (weightedMovingAverage > range2thresholdLevel1ServeAngle && weightedMovingAverage <= range2thresholdLeve2ServeAngle) {
+                predScore = 1;
+            }
+            else if (weightedMovingAverage > range2thresholdLeve2ServeAngle && weightedMovingAverage <= range2thresholdLeve3ServeAngle) {
+                predScore = 2;
+            }
+            else if (weightedMovingAverage > range2thresholdLeve3ServeAngle) {
+                predScore = 3;
+            }
+            else {
+                predScore = 0;
+            }
+        }
+        else if(playerAge > 35) {
+            Log.i(ProjectConstants.TAG, "Prediction score for above 35");
+            if (weightedMovingAverage > range3thresholdLevel1ServeAngle && weightedMovingAverage <= range3thresholdLeve2ServeAngle) {
+                Log.i(ProjectConstants.TAG, "WMA is above " + range3thresholdLevel1ServeAngle);
+                predScore = 1.0;
+                Log.i(ProjectConstants.TAG, "Prediction Score based on age and WMA - " + predScore);
+            }
+            else if (weightedMovingAverage > range3thresholdLeve2ServeAngle && weightedMovingAverage <= range3thresholdLeve3ServeAngle) {
+                predScore = 2.0;
+            }
+            else if (weightedMovingAverage > range3thresholdLeve3ServeAngle) {
+                predScore = 3.0;
+            }
+            else {
+                predScore = 0;
+            }
+        }
+        else {
+            Log.e(ProjectConstants.TAG, "Player is not in the appropriate age group");
+        }
+        Log.i(ProjectConstants.TAG, "Prediction Score based on age - " + predScore);
+        return predScore;
     }
 }

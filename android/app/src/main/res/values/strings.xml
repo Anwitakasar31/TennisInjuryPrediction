@@ -18,11 +18,11 @@
         <item>GPU</item>
         <item>NNAPI</item>
     </string-array>
-    <string name="title_activity_player">PlayerActivity</string>
+    <string name="title_activity_player">Add Player</string>
     <string name="view_data">View Data</string>
     <string name="delete">Delete</string>
-    <string name="title_activity_player_list">PlayerListActivity</string>
-    <string name="title_activity_player_dashboard">PlayerDashboardActivity</string>
+    <string name="title_activity_player_list">Player List</string>
+    <string name="title_activity_player_dashboard">Player Dashboard</string>
     <string name="capture">Capture</string>
     <string name="result">View Results</string>
     <string name="tracking">Tracking</string>
