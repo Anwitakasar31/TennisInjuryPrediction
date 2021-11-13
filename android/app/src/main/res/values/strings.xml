@@ -23,8 +23,8 @@
     <string name="delete">Delete</string>
     <string name="title_activity_player_list">Player List</string>
     <string name="title_activity_player_dashboard">Player Dashboard</string>
-    <string name="capture">Capture</string>
-    <string name="result">View Results</string>
-    <string name="tracking">Tracking</string>
+    <string name="capture">Capture Pose</string>
+    <string name="result">View Prediction</string>
+    <string name="tracking">Record Tracking</string>
     <string name="processdata">Process Data</string>
 </resources>

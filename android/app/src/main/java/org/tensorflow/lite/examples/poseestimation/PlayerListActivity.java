@@ -56,6 +56,7 @@ public class PlayerListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                     long arg3) {
+                data.clear();
                 //playerName
                 String value = (String) adapter.getItemAtPosition(position);
                 // assuming string and if you want to get the value on click of list item
