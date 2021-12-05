@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlayerActivity extends AppCompatActivity {
-    EditText name, age , tennisLevel, updateold, updatenew, delete;
+    EditText name, age , experience, updateold, updatenew, delete;
     PlayerDBHelper playerDBHelper;
     //private static final Logger LOGGER = new Logger("PlayerActivity", "TennisInjuryPredictor");
     private static final String TAG = "TennisInjuryPredictor";
@@ -33,7 +33,7 @@ public class PlayerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         name= (EditText) findViewById(R.id.editName);
         age= (EditText) findViewById(R.id.editAge);
-
+        experience= (EditText) findViewById(R.id.editExperience);
         playerDBHelper = new PlayerDBHelper(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -62,6 +62,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
         String t1 = name.getText().toString();
         int t2 = Integer.parseInt(age.getText().toString());
+        String t3 = experience.getText().toString();
         if(t1.isEmpty() || t2 == 0)
         {
             Message.message(getApplicationContext(),"Enter Both Name and Age");
@@ -72,6 +73,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             player.SetPlayerName(t1);
             player.SetPlayerAge(t2);
+            player.SetPlayerLevel(t3);
             long id = playerDBHelper.addPlayer(player);
             if(id<=0)
             {

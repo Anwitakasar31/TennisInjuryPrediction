@@ -150,7 +150,8 @@ public class TennisServeDetailDBHelper extends SQLiteOpenHelper {
 // Select All Query
         String selectQuery = "SELECT RecordDate, ServeAngle FROM " + TABLE_TennisServeDetailS
                 //+ " Inner Join tennisServeDetail on TennisServeDetail.tennisServeDetailID = tennisServeDetail.tennisServeDetailID "
-                + " Where PlayerID = " + playerId + " ORDER BY datetime(RecordDate) DESC ";
+               // + " Where PlayerID = " + playerId + " ORDER BY datetime(RecordDate) DESC ";
+                + " Where PlayerID = " + playerId + " ORDER BY RecordID DESC ";
                 //+ "LIMIT " + expectedCount;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

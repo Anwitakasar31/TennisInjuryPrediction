@@ -29,11 +29,11 @@ public class TennisInjuryPredictor {
     //range 3 - 35 +
     double range1thresholdLevel1ServeAngle = 130;
     double range1thresholdLeve2ServeAngle = 140;
-    double range1thresholdLeve3ServeAngle = 160;
+    double range1thresholdLeve3ServeAngle = 150;
 
     double range2thresholdLevel1ServeAngle = 130;
     double range2thresholdLeve2ServeAngle = 140;
-    double range2thresholdLeve3ServeAngle = 160;
+    double range2thresholdLeve3ServeAngle = 150;
 
     double range3thresholdLevel1ServeAngle = 120;
     double range3thresholdLeve2ServeAngle = 130;
@@ -145,6 +145,7 @@ public class TennisInjuryPredictor {
     private double[] getArray(List<Double> tennisServeDetails, int expectedCount)
     {
         try {
+            //Records are ordered by record id decending order
             Log.i(ProjectConstants.TAG, "inside getArray - " + tennisServeDetails.size());
             int indexToStart = 0;
             int recordCount = tennisServeDetails.size();
@@ -154,20 +155,20 @@ public class TennisInjuryPredictor {
                 Log.i(ProjectConstants.TAG, "Index to Start - " + indexToStart);
             }
             double[] playerServerAngles = new double[expectedCount];
-            int i = 0;
-            int totalCount = tennisServeDetails.size();
-            for (int x = indexToStart - 1; x < recordCount -1; x++) {
+            //int i = 0;
+            //for (int x = indexToStart - 1; x < recordCount -1; x++) {
+            for (int x = 0; x < expectedCount; x++) {
                 Double tennisServeDetail = tennisServeDetails.get(x);
                 if (tennisServeDetail == null) {
                     Log.i(ProjectConstants.TAG, "tennisServeDetail record not found");
                 } else {
                     Log.i(ProjectConstants.TAG, "Adding value -" + tennisServeDetail + " in the array");
-                    playerServerAngles[i] = tennisServeDetail;
-                    i++;
+                    playerServerAngles[x] = tennisServeDetail;
+                    //i++;
                 }
             }
             Log.i(ProjectConstants.TAG, "playerServerAngles array size - " + playerServerAngles.length);
-            Log.i(ProjectConstants.TAG, "Array values - " + Arrays.toString(playerServerAngles));
+            Log.i(ProjectConstants.TAG, "Array values in getArray (Latest) - " + Arrays.toString(playerServerAngles));
             return playerServerAngles;
         }
         catch(Exception ex)

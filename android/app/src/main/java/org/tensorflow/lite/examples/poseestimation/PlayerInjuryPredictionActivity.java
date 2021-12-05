@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -65,10 +66,12 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
             else if(predictionScore == 2)
             {
                 txtPrediction.setText("You have moderate chances of shoulder injury");
+                txtPrediction.setTextColor(Color.RED);
             }
             else if(predictionScore == 3)
             {
                 txtPrediction.setText("You have high chances of shoulder injury");
+                txtPrediction.setTextColor(Color.RED);
             }
             else
             {

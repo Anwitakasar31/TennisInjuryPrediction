@@ -198,7 +198,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
             TennisServeDetail tennisServeDetail = new TennisServeDetail();
             tennisServeDetail.SetPlayerID(playerID);
             tennisServeDetail.SetRecordDate(dateNow);
-            tennisServeDetail.SetServeAngle(124.9);
+            tennisServeDetail.SetServeAngle(144.7);
             tennisServeDetailDBHelper.addTennisServeDetail(tennisServeDetail);
             Message.message(getApplicationContext(),"Insertion Unsuccessful");
         }
