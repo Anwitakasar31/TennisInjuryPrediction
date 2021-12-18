@@ -36,8 +36,8 @@ public class TennisInjuryPredictor {
     double range2thresholdLeve3ServeAngle = 150;
 
     double range3thresholdLevel1ServeAngle = 120;
-    double range3thresholdLeve2ServeAngle = 130;
-    double range3thresholdLeve3ServeAngle = 140;
+    double range3thresholdLeve2ServeAngle = 125;
+    double range3thresholdLeve3ServeAngle = 130;
 
     public TennisInjuryPredictor()
     {

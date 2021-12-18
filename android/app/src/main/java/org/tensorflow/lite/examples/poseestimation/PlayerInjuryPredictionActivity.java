@@ -10,6 +10,8 @@ import android.widget.TextView;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResult;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResultDBHelper;
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Message;
+import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.Player;
+import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.PlayerDBHelper;
 
 import java.util.ArrayList;
 
@@ -17,8 +19,9 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
     int playerID;
     String playerName;
     ArrayList<String> dataList;
+    PlayerDBHelper playerDBHelper;
     InjuryPredictionResultDBHelper injuryPredictionResultDBHelper;
-    TextView txtPlayerID, txtPlayerName, txtWMA, txtPredictionScore, txtPrediction;
+    TextView txtPlayerID, txtPlayerName, txtPlayerAge, txtPlayerLevel, txtWMA, txtPredictionScore, txtPrediction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +42,19 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
             Log.i(ProjectConstants.TAG, "PlayerName in TennisServeRecord from Array Value - " + playerName);
         }
 
+        playerDBHelper = new PlayerDBHelper(this);
         injuryPredictionResultDBHelper = new InjuryPredictionResultDBHelper(this);
 
+        //Get Player details
+        Player player = playerDBHelper.getPlayer(playerID);
+
         txtPlayerName= (TextView) findViewById(R.id.textPlayerName);
-        txtPlayerName.setText(playerName);
+        txtPlayerName.setText("Name - " +playerName);
+        txtPlayerAge= (TextView) findViewById(R.id.textPlayerAge);
+        txtPlayerAge.setText("Age - " + player.GetPlayerAge());
+        txtPlayerLevel= (TextView) findViewById(R.id.textPlayerLevel);
+        txtPlayerLevel.setText("Experience - " + player.GetPlayerLevel());
+
         txtWMA= (TextView) findViewById(R.id.textWMA);
         txtPredictionScore= (TextView) findViewById(R.id.textPredictionScore);
         txtPrediction= (TextView) findViewById(R.id.textPrediction);
