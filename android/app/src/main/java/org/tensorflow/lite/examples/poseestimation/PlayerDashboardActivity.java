@@ -90,7 +90,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 startActivityForResult(myIntent, 0);
             }
         });
-        Button button2 = (Button) findViewById(R.id.button2);
+       /* Button button2 = (Button) findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent myIntent = new Intent( view.getContext(), PlayerInjuryPredictionActivity.class);
@@ -102,8 +102,8 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 myIntent.putExtra("data", dataList);
                 startActivityForResult(myIntent, 0);
             }
-        });
-        Button button3 = (Button) findViewById(R.id.button3);
+        });*/
+       /* Button button3 = (Button) findViewById(R.id.button3);
         button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent myIntent = new Intent( view.getContext(), PlayerTennisServeRecordActivity.class);
@@ -115,7 +115,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
                 myIntent.putExtra("data", dataList);
                 startActivityForResult(myIntent, 0);
             }
-        });
+        });*/
         //Process record
         Button button4 = (Button) findViewById(R.id.button4);
         button4.setOnClickListener(new View.OnClickListener() {
@@ -159,14 +159,26 @@ public class PlayerDashboardActivity extends AppCompatActivity {
 
     public void ViewResults(View view)
     {
-        //Finish these
-        //Message.message(this,data.GetPlayerName());
+        Intent myIntent = new Intent( view.getContext(), PlayerInjuryPredictionActivity.class);
+        if(txtPlayerID.getText() !=null) {
+            playerID = Integer.parseInt(txtPlayerID.getText().toString());
+        }
+        myIntent.putExtra("id", playerID);
+        myIntent.putExtra("name", playerName);
+        myIntent.putExtra("data", dataList);
+        startActivityForResult(myIntent, 0);
     }
 
     public void ViewTennisServeTracking(View view)
     {
-        //Finish these
-        //Message.message(this,data.GetPlayerName());
+        Intent myIntent = new Intent( view.getContext(), PlayerTennisServeRecordActivity.class);
+        if(txtPlayerID.getText() !=null) {
+            playerID = Integer.parseInt(txtPlayerID.getText().toString());
+        }
+        myIntent.putExtra("id", playerID);
+        myIntent.putExtra("name", playerName);
+        myIntent.putExtra("data", dataList);
+        startActivityForResult(myIntent, 0);
     }
 
     public void ProcessTennisServeDetails(View view)
@@ -202,5 +214,13 @@ public class PlayerDashboardActivity extends AppCompatActivity {
             tennisServeDetailDBHelper.addTennisServeDetail(tennisServeDetail);
             Message.message(getApplicationContext(),"Insertion Unsuccessful");
         }
+    }
+
+    public void back(View view) {
+        Intent myIntent = new Intent(PlayerDashboardActivity.this, PlayerListActivity.class);
+        myIntent.putExtra("id", playerID);
+        myIntent.putExtra("name", playerName);
+        myIntent.putExtra("data", dataList);
+        startActivityForResult(myIntent, 0);
     }
 }

@@ -2,9 +2,11 @@ package org.tensorflow.lite.examples.poseestimation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import org.tensorflow.lite.examples.TennisInjuryPredictor.Database.InjuryPredictionResult;
@@ -91,5 +93,14 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
             }
         }
 
+
+    }
+
+    public void back(View view) {
+        Intent myIntent = new Intent(PlayerInjuryPredictionActivity.this, PlayerDashboardActivity.class);
+        myIntent.putExtra("id", playerID);
+        myIntent.putExtra("name", playerName);
+        myIntent.putExtra("data", dataList);
+        startActivityForResult(myIntent, 0);
     }
 }
