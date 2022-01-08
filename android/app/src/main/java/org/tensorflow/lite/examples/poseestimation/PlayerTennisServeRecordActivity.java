@@ -2,8 +2,10 @@ package org.tensorflow.lite.examples.poseestimation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,6 +19,7 @@ public class PlayerTennisServeRecordActivity extends AppCompatActivity {
     ListView playerListView;
     TennisServeDetailDBHelper tennisServeDetailDBHelper;
     int playerID;
+    String playerName;
     ArrayList<String> dataList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,7 @@ public class PlayerTennisServeRecordActivity extends AppCompatActivity {
         if(dataList.size() > 1)
         {
             String playerID1 = dataList.get(0);
-            String playerName = dataList.get(1);
+            playerName = dataList.get(1);
             Log.i(ProjectConstants.TAG, "PlayerID in TennisServeRecord from Array Value - " + playerID1);
             Log.i(ProjectConstants.TAG, "PlayerName in TennisServeRecord from Array Value - " + playerName);
         }
@@ -45,5 +48,13 @@ public class PlayerTennisServeRecordActivity extends AppCompatActivity {
         ArrayAdapter<String> playersAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, players);
         playerListView.setAdapter(playersAdapter);
+    }
+
+    public void back(View view) {
+        Intent myIntent = new Intent(PlayerTennisServeRecordActivity.this, PlayerDashboardActivity.class);
+        myIntent.putExtra("id", playerID);
+        myIntent.putExtra("name", playerName);
+        myIntent.putExtra("data", dataList);
+        startActivityForResult(myIntent, 0);
     }
 }

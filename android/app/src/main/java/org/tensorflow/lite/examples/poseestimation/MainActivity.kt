@@ -19,6 +19,7 @@ package org.tensorflow.lite.examples.poseestimation
 import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Process
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvFPS: TextView
     private lateinit var tvShoulderAngle: TextView
     private lateinit var btnSave: Button
+    private lateinit var btnCancel: Button
     private lateinit var spnDevice: Spinner
     private lateinit var spnModel: Spinner
     private lateinit var tvClassificationValue1: TextView
@@ -86,6 +88,7 @@ class MainActivity : AppCompatActivity() {
     private var tennisServeDetailDBHelper: TennisServeDetailDBHelper? = null
     lateinit var dataList: ArrayList<String>
     var playerID: Int = 0
+    var playerName: String = ""
     var playerShoulderAngle: Float =0F
     private val requestPermissionLauncher =
             registerForActivityResult(
@@ -159,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "DataList size in Main - " + dataList.size)
                 val playerID1 = dataList!![0]
                 playerID = playerID1.toInt()
-                val playerName = dataList!![1]
+                playerName = dataList!![1]
                 Log.i(TAG, "PlayerID in Main from Array Value - $playerID1")
                 Log.i(TAG, "PlayerName in Main from Array Value - $playerName")
             }
@@ -184,6 +187,10 @@ class MainActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.button4)
         btnSave.setOnClickListener {
             saveTennisServeRecord(it);
+        }
+        btnCancel = findViewById(R.id.button5)
+        btnCancel.setOnClickListener {
+            ViewDashboard(it);
         }
         tennisServeDetailDBHelper = TennisServeDetailDBHelper( this)
     }
@@ -373,6 +380,17 @@ class MainActivity : AppCompatActivity() {
         {
             Log.d(TAG, "Could not save TennisServeDetail")
         }
+    }
+
+    private fun ViewDashboard(view: View) {
+        val myIntent = Intent(
+            this@MainActivity,
+            PlayerDashboardActivity::class.java
+        )
+        myIntent.putExtra("id", playerID)
+        myIntent.putExtra("name", playerName)
+        myIntent.putExtra("data", dataList)
+        startActivityForResult(myIntent, 0)
     }
 
     /**

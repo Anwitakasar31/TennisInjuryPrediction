@@ -24,16 +24,18 @@ public class TennisInjuryPredictor {
     Player player;
     int playerAge;
     //Player age range
-    // range 1- 15 -25
-    //range 2 = 25 - 35
-    //range 3 - 35 +
+    // range 1- 15 -30
+    //range 2 = 30 - 45
+    //range 3 - 45 +
+    double maxServeAngle = 170;
+    double minServeAngle = 60;
     double range1thresholdLevel1ServeAngle = 130;
     double range1thresholdLeve2ServeAngle = 140;
     double range1thresholdLeve3ServeAngle = 150;
 
-    double range2thresholdLevel1ServeAngle = 130;
-    double range2thresholdLeve2ServeAngle = 140;
-    double range2thresholdLeve3ServeAngle = 150;
+    double range2thresholdLevel1ServeAngle = 125;
+    double range2thresholdLeve2ServeAngle = 130;
+    double range2thresholdLeve3ServeAngle = 135;
 
     double range3thresholdLevel1ServeAngle = 120;
     double range3thresholdLeve2ServeAngle = 125;
@@ -185,35 +187,35 @@ public class TennisInjuryPredictor {
         //range 2 = 25 - 35
         //range 3 - 35 +
         double predScore = 0;
-        if(playerAge >= 15 && playerAge <= 25) {
+        if(playerAge >= 15 && playerAge <= 30) {
             if (weightedMovingAverage > range1thresholdLevel1ServeAngle && weightedMovingAverage <= range1thresholdLeve2ServeAngle) {
                 predScore = 1;
             }
             else if (weightedMovingAverage > range1thresholdLeve2ServeAngle && weightedMovingAverage <= range1thresholdLeve3ServeAngle) {
                 predScore = 2;
             }
-            else if (weightedMovingAverage > range1thresholdLeve3ServeAngle) {
+            else if (weightedMovingAverage > range1thresholdLeve3ServeAngle && weightedMovingAverage <=maxServeAngle) {
                 predScore = 3;
             }
             else {
                 predScore = 0;
             }
         }
-        else if(playerAge > 25 && playerAge <= 35) {
+        else if(playerAge > 30 && playerAge <= 45) {
             if (weightedMovingAverage > range2thresholdLevel1ServeAngle && weightedMovingAverage <= range2thresholdLeve2ServeAngle) {
                 predScore = 1;
             }
             else if (weightedMovingAverage > range2thresholdLeve2ServeAngle && weightedMovingAverage <= range2thresholdLeve3ServeAngle) {
                 predScore = 2;
             }
-            else if (weightedMovingAverage > range2thresholdLeve3ServeAngle) {
+            else if (weightedMovingAverage > range2thresholdLeve3ServeAngle && weightedMovingAverage <=maxServeAngle) {
                 predScore = 3;
             }
             else {
                 predScore = 0;
             }
         }
-        else if(playerAge > 35) {
+        else if(playerAge > 45 ) {
             Log.i(ProjectConstants.TAG, "Prediction score for above 35");
             if (weightedMovingAverage > range3thresholdLevel1ServeAngle && weightedMovingAverage <= range3thresholdLeve2ServeAngle) {
                 Log.i(ProjectConstants.TAG, "WMA is above " + range3thresholdLevel1ServeAngle);
@@ -223,7 +225,7 @@ public class TennisInjuryPredictor {
             else if (weightedMovingAverage > range3thresholdLeve2ServeAngle && weightedMovingAverage <= range3thresholdLeve3ServeAngle) {
                 predScore = 2.0;
             }
-            else if (weightedMovingAverage > range3thresholdLeve3ServeAngle) {
+            else if (weightedMovingAverage > range3thresholdLeve3ServeAngle && weightedMovingAverage <=maxServeAngle) {
                 predScore = 3.0;
             }
             else {

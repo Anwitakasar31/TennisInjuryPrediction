@@ -19,8 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".PlayerTennisServeRecordActivity"></activity>
-        <activity android:name=".PlayerInjuryPredictionActivity" />
+        <activity android:name=".PlayerTennisServeRecordActivity"
+            android:label="@string/title_activity_player_tennis_serve_record"
+            android:theme="@style/Theme.PoseEstimation" />
+        <activity android:name=".PlayerInjuryPredictionActivity"
+            android:label="@string/title_activity_player_injury_prediction"
+            android:theme="@style/Theme.PoseEstimation" />
         <activity
             android:name=".PlayerListActivity"
             android:label="@string/title_activity_player_list"

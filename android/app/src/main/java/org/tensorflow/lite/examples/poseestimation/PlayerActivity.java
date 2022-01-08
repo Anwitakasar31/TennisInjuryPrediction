@@ -125,6 +125,12 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
     }
+    public void Cancel( View view)
+    {
+        Intent myIntent = new Intent(PlayerActivity.this, PlayerListActivity.class);
+        startActivityForResult(myIntent, 0);
+    }
+
     public void delete( View view)
     {
         String uname = delete.getText().toString();

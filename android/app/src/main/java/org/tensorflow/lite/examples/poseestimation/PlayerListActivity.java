@@ -91,8 +91,5 @@ public class PlayerListActivity extends AppCompatActivity {
 
      }
 
-    public void addPlayer(View view)
-    {
-    }
 
 }
