@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,7 +29,8 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_injury_prediction);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         Bundle b = getIntent().getExtras();
         playerID = b.getInt("id");
         dataList = (ArrayList<String>) getIntent().getSerializableExtra("data");
@@ -52,14 +54,14 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
 
         txtPlayerName= (TextView) findViewById(R.id.textPlayerName);
         txtPlayerName.setText("Name - " +playerName);
-        txtPlayerAge= (TextView) findViewById(R.id.textPlayerAge);
+        txtPlayerAge= (TextView) findViewById(R.id.txtPlayerAge);
         txtPlayerAge.setText("Age - " + player.GetPlayerAge());
-        txtPlayerLevel= (TextView) findViewById(R.id.textPlayerLevel);
+        txtPlayerLevel= (TextView) findViewById(R.id.txtPlayerLevel);
         txtPlayerLevel.setText("Experience - " + player.GetPlayerLevel());
 
-        txtWMA= (TextView) findViewById(R.id.textWMA);
-        txtPredictionScore= (TextView) findViewById(R.id.textPredictionScore);
-        txtPrediction= (TextView) findViewById(R.id.textPrediction);
+        txtWMA= (TextView) findViewById(R.id.txtWMA);
+        txtPredictionScore= (TextView) findViewById(R.id.txtPredictionScore);
+        txtPrediction= (TextView) findViewById(R.id.txtPrediction);
 
         InjuryPredictionResult injuryPredictionResult = injuryPredictionResultDBHelper.getInjuryPredictionResult(playerID);
         if(injuryPredictionResult == null)
@@ -76,6 +78,7 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
             if(predictionScore == 1)
             {
                 txtPrediction.setText("You have low chances of shoulder injury");
+                txtPrediction.setTextColor(Color.GREEN);
             }
             else if(predictionScore == 2)
             {
