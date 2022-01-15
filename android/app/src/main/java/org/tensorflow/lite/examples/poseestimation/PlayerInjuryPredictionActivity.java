@@ -92,10 +92,10 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
             }
             else
             {
-                txtPrediction.setText("You have no chances of shoulder injury");
+                txtPrediction.setText("You have no chances or low chances of shoulder injury");
+                txtPrediction.setTextColor(Color.GREEN);
             }
         }
-
 
     }
 

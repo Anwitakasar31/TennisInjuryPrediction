@@ -35,7 +35,7 @@ public class PlayerDashboardActivity extends AppCompatActivity {
     TextView txtPlayerID, txtPlayerName;
     int playerID;
     String playerName;
-    int expectedRecordCount = 10;
+    int expectedRecordCount = 30;
     ArrayList<String> dataList;
     private static final String TAG = "TennisInjuryPredictor";
     @Override
