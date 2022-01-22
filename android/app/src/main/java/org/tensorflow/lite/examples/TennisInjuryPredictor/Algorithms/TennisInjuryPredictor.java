@@ -28,18 +28,16 @@ public class TennisInjuryPredictor {
     //range 2 = 30 - 45
     //range 3 - 45 +
     double maxServeAngle = 155;
-    double minServeAngle = 100;
-    double range1thresholdLevel1ServeAngle = 130;
-    double range1thresholdLeve2ServeAngle = 140;
-    double range1thresholdLeve3ServeAngle = 145;
+    double minServeAngle = 92;
+    //Range of motion
+   double range1thresholdMinServeAngle = 100;
+   double range1thresholdMaxServeAngle = 115;
 
-    double range2thresholdLevel1ServeAngle = 125;
-    double range2thresholdLeve2ServeAngle = 130;
-    double range2thresholdLeve3ServeAngle = 135;
+    double range2thresholdMinServeAngle = 100;
+    double range2thresholdMaxServeAngle = 110;
 
-    double range3thresholdLevel1ServeAngle = 120;
-    double range3thresholdLeve2ServeAngle = 125;
-    double range3thresholdLeve3ServeAngle = 130;
+    double range3thresholdMinServeAngle = 95;
+    double range3thresholdMaxServeAngle = 105;
 
     public TennisInjuryPredictor()
     {
@@ -188,28 +186,22 @@ public class TennisInjuryPredictor {
         //range 3 - 35 +
         double predScore = 0;
         if(playerAge >= 15 && playerAge <= 30) {
-            if (weightedMovingAverage > range1thresholdLevel1ServeAngle && weightedMovingAverage <= range1thresholdLeve2ServeAngle) {
-                predScore = 1;
+            if (weightedMovingAverage >= range1thresholdMinServeAngle && weightedMovingAverage <= range1thresholdMaxServeAngle) {
+                predScore = 3.0;
             }
-            else if (weightedMovingAverage > range1thresholdLeve2ServeAngle && weightedMovingAverage <= range1thresholdLeve3ServeAngle) {
-                predScore = 2;
-            }
-            else if (weightedMovingAverage > range1thresholdLeve3ServeAngle && weightedMovingAverage <=maxServeAngle) {
-                predScore = 3;
+            else if (weightedMovingAverage > range1thresholdMaxServeAngle && weightedMovingAverage <=maxServeAngle) {
+                predScore = 1.0;
             }
             else {
                 predScore = 0;
             }
         }
         else if(playerAge > 30 && playerAge <= 45) {
-            if (weightedMovingAverage > range2thresholdLevel1ServeAngle && weightedMovingAverage <= range2thresholdLeve2ServeAngle) {
-                predScore = 1;
+            if (weightedMovingAverage > range2thresholdMinServeAngle && weightedMovingAverage <= range2thresholdMaxServeAngle) {
+                predScore = 3.0;
             }
-            else if (weightedMovingAverage > range2thresholdLeve2ServeAngle && weightedMovingAverage <= range2thresholdLeve3ServeAngle) {
-                predScore = 2;
-            }
-            else if (weightedMovingAverage > range2thresholdLeve3ServeAngle && weightedMovingAverage <=maxServeAngle) {
-                predScore = 3;
+            else if (weightedMovingAverage > range2thresholdMaxServeAngle && weightedMovingAverage <=maxServeAngle) {
+                predScore = 1.0;
             }
             else {
                 predScore = 0;
@@ -217,16 +209,13 @@ public class TennisInjuryPredictor {
         }
         else if(playerAge > 45 ) {
             Log.i(ProjectConstants.TAG, "Prediction score for above 35");
-            if (weightedMovingAverage > range3thresholdLevel1ServeAngle && weightedMovingAverage <= range3thresholdLeve2ServeAngle) {
-                Log.i(ProjectConstants.TAG, "WMA is above " + range3thresholdLevel1ServeAngle);
-                predScore = 1.0;
+            if (weightedMovingAverage > range3thresholdMinServeAngle && weightedMovingAverage <= range3thresholdMaxServeAngle) {
+                Log.i(ProjectConstants.TAG, "WMA is above " + range3thresholdMinServeAngle);
+                predScore = 3.0;
                 Log.i(ProjectConstants.TAG, "Prediction Score based on age and WMA - " + predScore);
             }
-            else if (weightedMovingAverage > range3thresholdLeve2ServeAngle && weightedMovingAverage <= range3thresholdLeve3ServeAngle) {
-                predScore = 2.0;
-            }
-            else if (weightedMovingAverage > range3thresholdLeve3ServeAngle && weightedMovingAverage <=maxServeAngle) {
-                predScore = 3.0;
+            else if (weightedMovingAverage > range3thresholdMaxServeAngle && weightedMovingAverage <=maxServeAngle) {
+                predScore = 1.0;
             }
             else {
                 predScore = 0;

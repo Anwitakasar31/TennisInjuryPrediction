@@ -57,7 +57,11 @@ public class PlayerInjuryPredictionActivity extends AppCompatActivity {
         txtPlayerAge= (TextView) findViewById(R.id.txtPlayerAge);
         txtPlayerAge.setText("Age - " + player.GetPlayerAge());
         txtPlayerLevel= (TextView) findViewById(R.id.txtPlayerLevel);
-        txtPlayerLevel.setText("Experience - " + player.GetPlayerLevel());
+
+        if( player.GetPlayerLevel() != null)
+            txtPlayerLevel.setText("Experience - " + player.GetPlayerLevel());
+        else
+            txtPlayerLevel.setText("Experience - " + "");
 
         txtWMA= (TextView) findViewById(R.id.txtWMA);
         txtPredictionScore= (TextView) findViewById(R.id.txtPredictionScore);
