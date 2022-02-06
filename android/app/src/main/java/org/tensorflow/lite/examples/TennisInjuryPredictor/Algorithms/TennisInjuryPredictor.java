@@ -147,6 +147,7 @@ public class TennisInjuryPredictor {
         try {
             //Records are ordered by record id decending order
             Log.i(ProjectConstants.TAG, "inside getArray - " + tennisServeDetails.size());
+            Log.i(ProjectConstants.TAG, "List before processing - " + Arrays.toString(tennisServeDetails.toArray()));
             int indexToStart = 0;
             int recordCount = tennisServeDetails.size();
             Log.i(ProjectConstants.TAG, "tennisServeDetail list size in getArray - " + tennisServeDetails.size());
@@ -155,6 +156,7 @@ public class TennisInjuryPredictor {
                 Log.i(ProjectConstants.TAG, "Index to Start - " + indexToStart);
             }
             double[] playerServerAngles = new double[expectedCount];
+            int startindex = expectedCount -1;
             //int i = 0;
             //for (int x = indexToStart - 1; x < recordCount -1; x++) {
             for (int x = 0; x < expectedCount; x++) {
@@ -163,7 +165,7 @@ public class TennisInjuryPredictor {
                     Log.i(ProjectConstants.TAG, "tennisServeDetail record not found");
                 } else {
                     Log.i(ProjectConstants.TAG, "Adding value -" + tennisServeDetail + " in the array");
-                    playerServerAngles[x] = tennisServeDetail;
+                    playerServerAngles[startindex - x] = tennisServeDetail;
                     //i++;
                 }
             }
