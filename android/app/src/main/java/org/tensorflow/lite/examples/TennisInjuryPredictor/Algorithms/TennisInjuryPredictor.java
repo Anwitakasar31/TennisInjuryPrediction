@@ -183,11 +183,12 @@ public class TennisInjuryPredictor {
     private double calculatePredictionScore(int playerAge, double weightedMovingAverage)
     {
         //Player age range
-        // range 1- 15 -25
-        //range 2 = 25 - 35
-        //range 3 - 35 +
+        // range 1- 15 -30
+        //range 2 = 30 - 45
+        //range 3 - 45 +
         double predScore = 0;
         if(playerAge >= 15 && playerAge <= 30) {
+            Log.i(ProjectConstants.TAG, "Prediction score for age group 15 - 30");
             if (weightedMovingAverage >= range1thresholdMinServeAngle && weightedMovingAverage <= range1thresholdMaxServeAngle) {
                 predScore = 3.0;
             }
@@ -199,6 +200,7 @@ public class TennisInjuryPredictor {
             }
         }
         else if(playerAge > 30 && playerAge <= 45) {
+            Log.i(ProjectConstants.TAG, "Prediction score for age group 30 - 45");
             if (weightedMovingAverage > range2thresholdMinServeAngle && weightedMovingAverage <= range2thresholdMaxServeAngle) {
                 predScore = 3.0;
             }
@@ -210,7 +212,7 @@ public class TennisInjuryPredictor {
             }
         }
         else if(playerAge > 45 ) {
-            Log.i(ProjectConstants.TAG, "Prediction score for above 35");
+            Log.i(ProjectConstants.TAG, "Prediction score for above 45");
             if (weightedMovingAverage > range3thresholdMinServeAngle && weightedMovingAverage <= range3thresholdMaxServeAngle) {
                 Log.i(ProjectConstants.TAG, "WMA is above " + range3thresholdMinServeAngle);
                 predScore = 3.0;
